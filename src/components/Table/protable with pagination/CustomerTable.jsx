@@ -96,7 +96,7 @@ const CustomerTable = () => {
     customer.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.phone.includes(searchTerm)
-  );'
+  );
   
 // Pagination
 const ITEMS_PER_PAGE = 5; // Number of items to display per page
