@@ -3,11 +3,10 @@ import Modal from './Modal';
 import CustomerModal from './CustomerModal';
 import { customerdata } from './customers';
 import Pagination from './Pagination';
-import './CustomerTable.css'
+import './CustomerTable.css';
 
 const CustomerTable = () => {
-  const [customers, setCustomers] = useState([...customerdata
-  ]);
+  const [customers, setCustomers] = useState([...customerdata]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -91,6 +90,13 @@ const CustomerTable = () => {
     closeNewCustomerModal();
   };
 
+
+  const resetAndSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    setCurrentPage(1);
+    setSelectedCustomers([])
+  }
+
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -99,7 +105,7 @@ const CustomerTable = () => {
   );
   
 // Pagination
-const ITEMS_PER_PAGE = 5; // Number of items to display per page
+const ITEMS_PER_PAGE = 5; // Number of items to display per page 
 
 const [currentPage, setCurrentPage] = useState(1);
 
@@ -125,7 +131,7 @@ const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
         type="text"
         placeholder="Search"
         value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
+        onChange={e => resetAndSearch(e.target.value)}
         className="border border-gray-300 p-2 mb-4 w-full max-w-md"
       />
       <div className="flex mb-4 justify-start items-center gap-5">

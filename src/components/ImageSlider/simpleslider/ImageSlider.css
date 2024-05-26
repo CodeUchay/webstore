@@ -1,0 +1,44 @@
+.slider-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* Limit the max width for better visuals */
+  margin: auto;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  height: auto;
+  transition: transform 0.5s ease-in-out;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  transition: background-color 0.3s;
+  user-select: none;
+  z-index: 1; /* Ensure buttons are above the slides */
+}
+
+.nav.left {
+  left: 0;
+}
+
+.nav.right {
+  right: 0;
+}
+
+.nav:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
