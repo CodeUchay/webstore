@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import Modal from './Modal';
-import CustomerModal from './CustomerModal';
-import { customerdata } from './customers';
-import Pagination from './Pagination';
-import './CustomerTable.css';
+import React, { useState } from "react";
+import Modal from "./Modal";
+import CustomerModal from "./CustomerModal";
+import { customerdata } from "./customers";
+import Pagination from "./Pagination";
+import "./CustomerTable.css";
 
 const CustomerTable = () => {
   const [customers, setCustomers] = useState([...customerdata]);
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isNewCustomerModalOpen, setIsNewCustomerModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedCustomers, setSelectedCustomers] = useState([]);
-  const [bulkAction, setBulkAction] = useState('');
+  const [bulkAction, setBulkAction] = useState("");
 
   const openDeleteModal = (customer) => {
     setSelectedCustomer(customer);
@@ -37,7 +37,9 @@ const CustomerTable = () => {
   };
 
   const handleDelete = () => {
-    setCustomers(customers.filter(customer => customer.id !== selectedCustomer.id));
+    setCustomers(
+      customers.filter((customer) => customer.id !== selectedCustomer.id)
+    );
     closeDeleteModal();
   };
 
@@ -47,15 +49,19 @@ const CustomerTable = () => {
   };
 
   const handleEditSave = (editedCustomer) => {
-    setCustomers(customers.map(customer =>
-      customer.id === editedCustomer.id ? editedCustomer : customer
-    ));
+    setCustomers(
+      customers.map((customer) =>
+        customer.id === editedCustomer.id ? editedCustomer : customer
+      )
+    );
     closeEditModal();
   };
 
   const handleSelectCustomer = (id) => {
     setSelectedCustomers((prevSelected) =>
-      prevSelected.includes(id) ? prevSelected.filter((customerId) => customerId !== id) : [...prevSelected, id]
+      prevSelected.includes(id)
+        ? prevSelected.filter((customerId) => customerId !== id)
+        : [...prevSelected, id]
     );
   };
 
@@ -64,16 +70,25 @@ const CustomerTable = () => {
   };
 
   const handleBulkActionApply = () => {
-    if (bulkAction === 'activate' || bulkAction === 'deactivate') {
-      setCustomers(customers.map((customer) =>
-        selectedCustomers.includes(customer.id) ? { ...customer, status: bulkAction === 'activate' ? 'active' : 'inactive' } : customer
-      ));
+    if (bulkAction === "activate" || bulkAction === "deactivate") {
+      setCustomers(
+        customers.map((customer) =>
+          selectedCustomers.includes(customer.id)
+            ? {
+                ...customer,
+                status: bulkAction === "activate" ? "active" : "inactive",
+              }
+            : customer
+        )
+      );
     }
-    if (bulkAction === 'delete') {
-      setCustomers(customers.filter(customer => !selectedCustomers.includes(customer.id)));
+    if (bulkAction === "delete") {
+      setCustomers(
+        customers.filter((customer) => !selectedCustomers.includes(customer.id))
+      );
     }
     setSelectedCustomers([]);
-    setBulkAction('');
+    setBulkAction("");
   };
   const openNewCustomerModal = () => {
     setIsNewCustomerModalOpen(true);
@@ -83,46 +98,45 @@ const CustomerTable = () => {
     setIsNewCustomerModalOpen(false);
   };
 
-
-  
   const handleNewCustomerSave = (newCustomer) => {
     setCustomers([...customers, newCustomer]);
     closeNewCustomerModal();
   };
 
-
   const resetAndSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
     setCurrentPage(1);
-    setSelectedCustomers([])
-  }
+    setSelectedCustomers([]);
+  };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.phone.includes(searchTerm)
+  const filteredCustomers = customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone.includes(searchTerm)
   );
-  
-// Pagination
-const ITEMS_PER_PAGE = 5; // Number of items to display per page 
 
-const [currentPage, setCurrentPage] = useState(1);
+  // Pagination
+  const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
-// Calculate the index range for the current page
-const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-const currentCustomers = filteredCustomers.slice(indexOfFirstItem, indexOfLastItem);
+  const [currentPage, setCurrentPage] = useState(1);
 
-// Function to handle page change
-const handlePageChange = (pageNumber) => {
-  setCurrentPage(pageNumber);
-};
+  // Calculate the index range for the current page
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentCustomers = filteredCustomers.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
-// Calculate total number of pages
-const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
+  // Function to handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-
+  // Calculate total number of pages
+  const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
 
   return (
     <div className=" p-4 overflow-x-auto">
@@ -131,42 +145,53 @@ const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
         type="text"
         placeholder="Search"
         value={searchTerm}
-        onChange={e => resetAndSearch(e.target.value)}
+        onChange={(e) => resetAndSearch(e.target.value)}
         className="border border-gray-300 p-2 mb-4 w-full max-w-md"
       />
       <div className="flex mb-4 justify-start items-center gap-5">
         <div>
-        <select
-          value={bulkAction}
-          onChange={handleBulkActionChange}
-          className="border border-gray-300 p-2 mr-2"
-        >
-          <option value="">Bulk Actions</option>
-          <option value="activate">Activate</option>
-          <option value="deactivate">Deactivate</option>
-          <option value="delete">Delete</option>
-        </select>
-        <button
-          onClick={handleBulkActionApply}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          disabled={!bulkAction || selectedCustomers.length === 0}
-        >
-          Apply
-        </button>
+          <select
+            value={bulkAction}
+            onChange={handleBulkActionChange}
+            className="border border-gray-300 p-2 mr-2"
+          >
+            <option value="">Bulk Actions</option>
+            <option value="activate">Activate</option>
+            <option value="deactivate">Deactivate</option>
+            <option value="delete">Delete</option>
+          </select>
+          <button
+            onClick={handleBulkActionApply}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            disabled={!bulkAction || selectedCustomers.length === 0}
+          >
+            Apply
+          </button>
         </div>
-        <div >
-      <button
-          onClick={openNewCustomerModal}
-          className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
-        >
-          Add Customer
-        </button></div>
+        <div>
+          <button
+            onClick={openNewCustomerModal}
+            className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+          >
+            Add Customer
+          </button>
+        </div>
       </div>
-    
       <table className="min-w-full bg-white overflow-scroll ">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b"><input type="checkbox" onChange={(e) => setSelectedCustomers(e.target.checked ? filteredCustomers.map(customer => customer.id) : [])} /></th>
+            <th className="py-2 px-4 border-b">
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  setSelectedCustomers(
+                    e.target.checked
+                      ? filteredCustomers.map((customer) => customer.id)
+                      : []
+                  )
+                }
+              />
+            </th>
             <th className="py-2 px-4 border-b">Name</th>
             <th className="py-2 px-4 border-b">Address</th>
             <th className="py-2 px-4 border-b">Email</th>
@@ -176,7 +201,7 @@ const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
           </tr>
         </thead>
         <tbody>
-          { currentCustomers.map((customer) => (
+          {currentCustomers.map((customer) => (
             <tr key={customer.id} className="hover:bg-gray-100">
               <td className="py-2 px-4 border-b">
                 <input
@@ -208,10 +233,16 @@ const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
           ))}
         </tbody>
       </table>
-<Pagination  currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
-        <h2 className="text-xl font-bold mb-4">Are you sure you want to delete this customer?</h2>
+        <h2 className="text-xl font-bold mb-4">
+          Are you sure you want to delete this customer?
+        </h2>
         <p>{selectedCustomer && selectedCustomer.name}</p>
         <button
           onClick={handleDelete}

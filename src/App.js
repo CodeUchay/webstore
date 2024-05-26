@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <div >
-      <CustomerTable/>
+      <OrderTable/>
     </div>
   );
 };

@@ -12,6 +12,7 @@ const OrderTable = () => {
   const [orders, setOrders] = useState(orderData);
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
   const handleSortByDate = () => {
@@ -31,14 +32,30 @@ const OrderTable = () => {
     setOrders(updatedOrders);
   };
 
+  const resetAndSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    setCurrentPage(1);
+  };
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.phone.includes(searchTerm) ||
+      order.total.toString().includes(searchTerm) ||
+      order.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.trackingNumber.toLowerCase().includes(searchTerm.toLowerCase()) 
+  );
+
+
   // Calculate the index range for the current page
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
 
-  const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
+  const currentOrders = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
 
   // Calculate total number of pages
-  const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
 
   // Function to handle page change
   const handlePageChange = (pageNumber) => {
@@ -99,6 +116,7 @@ const OrderTable = () => {
     return filteredOrders;
   };
   const showFilteredOrdersByDate = () => {
+    setSearchTerm('')
     setOrders(filterOrdersByDate())
   };
   const clearFilterOrdersByDate = () => {
@@ -127,6 +145,13 @@ const OrderTable = () => {
   return (
     <div className="p-4 overflow-x-auto">
       <h1 className="text-2xl font-bold mb-4">Order Table</h1>
+      <input
+        type="text"
+        placeholder="Search"
+        value={searchTerm}
+        onChange={(e) => resetAndSearch(e.target.value)}
+        className="border border-gray-300 p-2 mb-4 w-full max-w-md"
+      />
       <div className="flex flex-row gap-2 justify-between items-center mb-3">
         <div className="flex flex-row gap-2 items-center p-4">
         <h3 className="text-md mb-1">Show Customer Details: </h3>
