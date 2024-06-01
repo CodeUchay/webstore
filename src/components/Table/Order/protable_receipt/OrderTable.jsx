@@ -35,6 +35,7 @@ const OrderTable = () => {
   const resetAndSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
     setCurrentPage(1);
+     clearFilterOrdersByDate()
   };
   const filteredOrders = orders.filter(
     (order) =>
@@ -167,7 +168,7 @@ const OrderTable = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border border-gray-300 py-1  px-2 w-48"
+            className="border border-gray-300 py-1 placeholder: text-gray-400  px-2 w-48"
           />
         </div>
         <div className="flex flex-row justify-center items-center">
@@ -176,7 +177,7 @@ const OrderTable = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border border-gray-300 py-1  px-2 w-48"
+            className="border border-gray-300 py-1 placeholder: text-gray-400  px-2 w-48"
           />
         </div>
         <button
